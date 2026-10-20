@@ -8,6 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 仓库是公开的。`public/` 是唯一的发布根，Cloudflare Pages 只发布这个目录；仓库根目录放的是说明类文件，不会出现在网站上。新增给访客看的文件放进 `public/`，其余都留在根目录。这样分是因为 Pages 会原样发布输出目录里的所有内容，放错了地方的文件，比如草稿或带密钥的配置，几分钟内就会被全网的扫描器读到。
 
+`public/_headers` 是例外：Pages 读取它来设置响应头，不会把它当成文件发布。里面有一条很严的 CSP，只允许加载内联样式和同源或 `data:` 图片。以后加脚本、外部字体或图片、iframe，都得先改 CSP，不然浏览器会直接拦截，表现就是功能莫名失效。Cloudflare 自己注入的脚本也受它约束，比如 Web Analytics 的 beacon、Email Obfuscation，开这类功能前也要先放行。真出了问题，删掉 `_headers` 再推送一次就能回滚。
+
 没有构建步骤，没有依赖，HTML 是手写的。以后要正式写文章时，可以换成 Astro、Hugo 这类静态生成器，Pages 支持它们的自动构建。
 
 ## 上线链路
@@ -38,5 +40,6 @@ push 到 `main`，Cloudflare Pages 自动部署（项目名 `alear030`，没有�
 上线后从外部验证：
 
 - 页面状态：`curl -I https://alear030.com/`（应为 200）、`https://www.alear030.com/x?y=1`（应 301 跳到根域名，并保留路径和查询串）、任意不存在的路径（应为 404）
+- 响应头：首页和不存在的路径都应带上 `_headers` 里的 CSP 和 `X-Frame-Options`，且没有重复的头。再用浏览器打开页面，看控制台有没有 `Refused to ...` 这类 CSP 报错
 - DNS 记录：优先用 DNS over HTTPS 查，比如 `https://cloudflare-dns.com/dns-query?name=...&type=TXT`（请求头带 `accept: application/dns-json`）或 `https://dns.google/resolve?name=...&type=...`。明文 DNS 查询可能在网络中途被代理或运营商截下来代答，而且还会被缓存，返回的不一定是真实答案
 - 邮件：测试信用另一个邮箱发，别用转发目标那个邮箱自己发给自己，Gmail 会把绕了一圈回来的信当成重复邮件。测试信写得太像垃圾邮件，比如全大写加一串感叹号，进垃圾箱是内容过滤的问题，跟配置无关。要看 SPF、DKIM、DMARC 的结果，打开那封信的原始邮件头
