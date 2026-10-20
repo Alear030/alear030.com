@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALEAR030</title>
+<meta name="description" content="ALEAR030">
+<meta name="theme-color" content="#fef5e9">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --paper: #fef5e9;
+    --ink: #2b4a63;
+    --hex: rgba(43, 74, 99, 0.045);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    background-color: var(--paper);
+    /* 淡六边形网格，取自 social-plate 的底纹 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath d='M28 0 L56 16.17 L56 48.5 L28 64.67 L0 48.5 L0 16.17 Z M28 64.67 L28 97' fill='none' stroke='%232b4a63' stroke-opacity='0.05' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 56px 97px;
+    color: var(--ink);
+    font-family: "Ubuntu", "Segoe UI", "Helvetica Neue", Arial, system-ui, sans-serif;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: clamp(2.5rem, 11vw, 8.5rem);
+    letter-spacing: 0.08em;
+    /* 字距加在每个字母右侧，补回左边让视觉居中 */
+    padding-left: 0.08em;
+    line-height: 1;
+    user-select: none;
+    animation: rise 900ms cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    h1 { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <h1>ALEAR030</h1>
+</body>
+</html>
