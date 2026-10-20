@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 仓库是公开的。`public/` 是唯一的发布根，Cloudflare Pages 只发布这个目录；仓库根目录放的是说明类文件，不会出现在网站上。新增给访客看的文件放进 `public/`，其余都留在根目录。这样分是因为 Pages 会原样发布输出目录里的所有内容，放错了地方的文件，比如草稿或带密钥的配置，几分钟内就会被全网的扫描器读到。
 
-`public/_headers` 是例外：Pages 读取它来设置响应头，不会把它当成文件发布。里面有一条很严的 CSP，只允许加载内联样式和同源或 `data:` 图片。以后加脚本、外部字体或图片、iframe，都得先改 CSP，不然浏览器会直接拦截，表现就是功能莫名失效。Cloudflare 自己注入的脚本也受它约束，比如 Web Analytics 的 beacon、Email Obfuscation，开这类功能前也要先放行。真出了问题，删掉 `_headers` 再推送一次就能回滚。
+`public/_headers` 是例外：Pages 读取它来设置响应头，不会把它当成文件发布。里面有一条很严的 CSP，只允许加载内联样式和同源或 `data:` 图片。以后加脚本、外部字体或图片、iframe，都得先改 CSP，不然浏览器会直接拦截，表现就是功能莫名失效。Cloudflare 自己注入的脚本也受它约束，比如 Web Analytics 的 beacon、Email Obfuscation，开这类功能前也要先放行。以 Web Analytics 为例，大致要在 CSP 里加 `script-src https://static.cloudflareinsights.com` 和 `connect-src https://cloudflareinsights.com`，这是凭记忆写的，没实测过，以预览分支上控制台没有报错为准。真出了问题，删掉 `_headers` 再推送一次就能回滚。
 
 没有构建步骤，没有依赖，HTML 是手写的。以后要正式写文章时，可以换成 Astro、Hugo 这类静态生成器，Pages 支持它们的自动构建。
 
@@ -30,6 +30,8 @@ push 到 `main`，Cloudflare Pages 自动部署（项目名 `alear030`，没有�
 字体用的是系统字体栈，没有打包字体文件，所以不同设备上的字形和字距会有差异。
 
 `public/og.jpg` 是分享卡片，从项目的 `assets/social-card.png` 压缩而来。卡片上的副标题介绍的是 harness 项目，不是个人站本身。做正式版时应该配一张专属卡片。
+
+首页刻意不写 `description` 和 `og:description`，分享卡片上只有图片和站名。原来这两项只是重复了站名，而站点以后会放 harness 以外的内容，不想用某一个项目的介绍把它定死。等站点定位确定了再补，在那之前不要加回去。
 
 `404.html` 不能删。Cloudflare Pages 在发布目录里找不到 `404.html` 时，会对任何不存在的路径都返回首页加 200。这样扫描器去探测 `/wp-login.php` 这类路径，会误以为文件存在，然后反复来试探。
 
