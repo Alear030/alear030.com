@@ -1,0 +1,5 @@
+# Pages 默认已下发 nosniff 和 Referrer-Policy，这里不重复
+# X-Frame-Options 和 CSP 里的 frame-ancestors 都是防 iframe 嵌入，前者照顾老浏览器，改的时候要一起改
+/*
+  X-Frame-Options: DENY
+  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
